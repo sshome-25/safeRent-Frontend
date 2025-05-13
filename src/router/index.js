@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LandingPage from '@/components/LandingPage.vue'
 import DiagnosisPage from '@/components/Diagnosis.vue'
 import MapPage from '@/components/MapPage.vue'
+import CommunityPage from '@/components/CommunityPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -21,6 +22,11 @@ const router = createRouter({
     path: '/map',
     name: 'map',
     component: MapPage
+  },
+  {
+    path: '/community',
+    name: 'community',
+    component: CommunityPage
   }
 ]
 })

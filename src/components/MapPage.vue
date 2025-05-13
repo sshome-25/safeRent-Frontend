@@ -432,7 +432,7 @@ export default {
       if (this.activeFilters.length > 0) {
         this.sortOption = 'filterRanking';
         this.sortProperties();
-      }
+        }
     },
     
     sortProperties() {
