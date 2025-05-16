@@ -6,7 +6,7 @@
         <nav>
           <ul>
             <li><a href="#">홈</a></li>
-            <li><a href="#">서비스 소개</a></li>
+            <li><router-link to="/">서비스 소개</router-link></li>
             <li><router-link to="/community">게시판</router-link></li>
             <li><button class="login-btn">로그인</button></li>
           </ul>
@@ -143,16 +143,10 @@
 </template>
 
 <script>
-export default {
-  name: 'LandingPage',
-  methods: {
-    navigateTo(routeName) {
-      this.$router.push({ name: routeName });
-    }
-  }
-}
+import LandingPage from './LandingPage';
+export default LandingPage;
 </script>
 
 <style scoped>
-    @import '../styles/landing-page.css';
+    @import './landing-page.css';
 </style>

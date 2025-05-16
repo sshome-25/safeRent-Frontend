@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import LandingPage from '@/components/LandingPage.vue'
-import DiagnosisPage from '@/components/Diagnosis.vue'
-import MapPage from '@/components/MapPage.vue'
-import CommunityPage from '@/components/CommunityPage.vue'
+import LandingPage from '@/pages/landing/index.vue'
+import DiagnosisPage from '@/pages/diagnosis/index.vue'
+import MapPage from '@/pages/map/index.vue'
+import CommunityPage from '@/pages/community/index.vue'
 
 const router = createRouter({
   history: createWebHistory(),
