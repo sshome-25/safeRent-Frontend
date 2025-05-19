@@ -1,17 +1,4 @@
 <template>
-  <header class="header">
-    <div class="container">
-      <div class="logo" @click="$router.push('/')">안심전세</div>
-      <nav>
-        <ul>
-          <li><a href="#">홈</a></li>
-          <li><router-link to="/">서비스 소개</router-link></li>
-          <li><router-link to="/community">게시판</router-link></li>
-          <li><button class="login-btn">로그인</button></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
   <div class="kakao-map-page">
     <div class="map-container" ref="mapContainer" id="kakao-map"></div>
   </div>
