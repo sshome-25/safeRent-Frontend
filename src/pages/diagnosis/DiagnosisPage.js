@@ -172,55 +172,66 @@ export default {
       this.isAnalyzing = true;
       
       // 여기서 넘깁니다.
-      this.sendAssessmentRequest(this.propertyData.latitude, this.propertyData.longitude, this.propertyData.price,
-        this.documentFiles.registerFile, this.documentFiles.contractFile)
+      this.sendAssessmentRequest(
+        this.propertyData.latitude, 
+        this.propertyData.longitude, 
+        this.propertyData.deposit,
+        this.documentFiles.register, 
+        this.documentFiles.contract
+      );
       
       // 분석 완료 (실제로는 API 호출 결과 처리)
       setTimeout(() => {
         this.isAnalyzing = false;
       }, 9000);
     },
-    
-    async sendAssessmentRequest (latitude, longitude, price, registerFile, contractFile) {
-      console.log("senc request")
+        
+    async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
+      console.log("send request");
       try {
-        // FormData 객체 생성
+        // 1. 먼저 게스트 토큰 발급 받기
+        const tokenResponse = await axios.post(
+          'http://localhost:8080/api/user/guest-token',
+          {
+            purpose: 'assessment-view'
+          }
+        );
+        
+        const token = tokenResponse.data.token;
+        
+        // 2. FormData 객체 생성
         const formData = new FormData();
         
-        // JSON 데이터를 Blob으로 변환하여 FormData에 추가
-        const assessmentRequest = {
-          latitude: latitude,
-          longitude: longitude,
-          price: price
-        };
-        
-        // JSON 데이터를 FormData에 추가
-        formData.append(
-          'assessmentRequest', 
-          new Blob([JSON.stringify(assessmentRequest)], { type: 'application/json' })
-        );
+        // URL 파라미터로 전달할 데이터를 FormData에 추가
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
+        formData.append('price', price);
         
         // 파일 추가
         formData.append('register_file', registerFile);
         formData.append('contract_file', contractFile);
+
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value instanceof File ? value.name : value}`);
+        }
         
-        // API 요청 보내기
+        // 3. 토큰을 사용하여 평가 요청 보내기
         const response = await axios.post(
           'http://localhost:8080/api/assessments/guest',
           formData,
           {
             headers: {
+              'Authorization': `Bearer ${token}`,
               'Content-Type': 'multipart/form-data'
             }
           }
         );
         
-        // 응답 처리
-        console.log('응답 결과:', response.data);
+        console.log('평가 결과:', response.data);
         return response.data;
-        
       } catch (error) {
-        console.error('오류 발생:', error);
+        console.error('평가 요청 실패:', error);
+        this.isAnalyzing = false;
         throw error;
       }
     },
