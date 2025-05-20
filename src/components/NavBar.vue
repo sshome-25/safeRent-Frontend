@@ -14,7 +14,7 @@
             <li v-else>
               <div class="user-menu">
                 <router-link to="/mypage" class="mypage-btn">마이페이지</router-link>
-                <button class="logout-btn" @click="logout">로그아웃</button>
+                <button class="logout-btn" @click="handleLogout">로그아웃</button>
               </div>
             </li>
           </ul>
@@ -24,40 +24,42 @@
   </template>
   
   <script>
+    import { useAuthStore } from '@/stores/auth';
+    import { storeToRefs } from 'pinia';
+    import { useRouter } from 'vue-router';
+
   export default {
     name: 'NavBar',
-    data() {
-      return {
-        isLoggedIn: false
-      }
-    },
-    created() {
-      // 컴포넌트가 생성될 때 로그인 상태 확인
-      this.checkLoginStatus()
-      
-      // 로그인 상태 변경 이벤트 리스너 등록 (이벤트 버스 사용 시)
-      // this.$eventBus.$on('login-status-changed', this.checkLoginStatus)
-    },
-    methods: {
-      checkLoginStatus() {
-        // 로컬 스토리지에서 토큰이나 로그인 정보 확인
-        const token = localStorage.getItem('userToken')
-        this.isLoggedIn = !!token
-      },
-      goToLogin() {
-        // 로그인 페이지로 이동
-        this.$router.push('/login')
-      },
-      logout() {
-        // 로그아웃 처리
-        localStorage.removeItem('userToken')
-        this.isLoggedIn = false
-        
-        // 다른 컴포넌트에 로그아웃 알림 (이벤트 버스 사용 시)
-        // this.$eventBus.$emit('login-status-changed')
-        
-        this.$router.push('/')
-      }
+    setup() {
+        const authStore = useAuthStore();
+        const router = useRouter();
+    
+        // storeToRefs로 반응형 상태 추출 (중요!)
+        const { isLoggedIn } = storeToRefs(authStore);
+
+        // 로그아웃 핸들러
+        const handleLogout = () => {
+            authStore.logout();
+            router.push('/');
+        };
+
+        // 로그인 페이지로 이동하는 함수
+        const goToLogin = () => {
+        // 현재 경로를 저장하여 로그인 후 돌아올 수 있도록 함 (선택적)
+        const currentRoute = router.currentRoute.value.fullPath;
+        if (currentRoute !== '/login') {
+            router.push({
+            path: '/login',
+            query: currentRoute !== '/' ? { redirect: currentRoute } : {}
+            });
+        }
+        };
+    
+        return {
+            isLoggedIn,
+            handleLogout,
+            goToLogin,
+        };
     }
   }
   </script>

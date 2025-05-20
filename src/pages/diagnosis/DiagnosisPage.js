@@ -187,7 +187,6 @@ export default {
     },
         
     async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
-      console.log("send request");
       try {
         // 1. 먼저 게스트 토큰 발급 받기
         const tokenResponse = await axios.post(

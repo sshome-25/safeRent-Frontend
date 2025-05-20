@@ -6,14 +6,21 @@
 </template>
 
 <script>
-  import NavBar from './components/NavBar.vue';
+import NavBar from './components/NavBar.vue';
+import { useAuthStore } from '@/stores/auth';
 
-  export default {
+export default {
     name: 'App',
     components: {
-      NavBar
-    }
-  }
+        NavBar
+    },
+    setup() {
+        const authStore = useAuthStore();
+    
+        // 애플리케이션 시작 시 인증 상태 확인
+        authStore.checkAuth();
+    },
+}
 </script>
 
 <style>

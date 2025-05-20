@@ -207,7 +207,7 @@ export default {
       console.log(signupData);
 
       // API 호출
-      const response = await axios
+      await axios
         .post("http://localhost:8080/api/user/signup", signupData)
         .then((response) => {
           // 회원가입 성공
@@ -240,7 +240,6 @@ export default {
           // 로딩 상태 해제
           this.isLoading = false;
         });
-      console.log(response);
     },
   },
   beforeDestroy() {

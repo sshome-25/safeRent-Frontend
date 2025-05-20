@@ -16,7 +16,7 @@
               <input 
                 type="email" 
                 id="email" 
-                v-model="email" 
+                v-model="loginData.email" 
                 required 
                 placeholder="이메일 주소를 입력하세요"
                 :class="{ 'input-error': errors.email }"
@@ -35,7 +35,7 @@
               <input 
                 :type="showPassword ? 'text' : 'password'" 
                 id="password" 
-                v-model="password" 
+                v-model="loginData.password" 
                 required 
                 placeholder="비밀번호를 입력하세요"
                 :class="{ 'input-error': errors.password }"
