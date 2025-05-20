@@ -1,13 +1,26 @@
 <template>
   <div id="app">
+    <NavBar/>
     <router-view/>
   </div>
 </template>
 
 <script>
-  export default {
+import NavBar from './components/NavBar.vue';
+import { useAuthStore } from '@/stores/auth';
+
+export default {
     name: 'App',
-  }
+    components: {
+        NavBar
+    },
+    setup() {
+        const authStore = useAuthStore();
+    
+        // 애플리케이션 시작 시 인증 상태 확인
+        authStore.checkAuth();
+    },
+}
 </script>
 
 <style>
