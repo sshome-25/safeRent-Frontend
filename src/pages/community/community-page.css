@@ -17,7 +17,8 @@
 }
 
 .community-page {
-  padding-top: 60px; /* 헤더 높이 */
+  padding-top: 60px;
+  /* 헤더 높이 */
   min-height: calc(100vh - 60px);
 }
 
@@ -40,7 +41,7 @@
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1200px !important;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -609,31 +610,31 @@
   .content-layout {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
   }
-  
+
   .category-list {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
   }
-  
+
   .category-list li {
     flex: 1;
     min-width: 120px;
     justify-content: center;
   }
-  
+
   .post-count {
     display: none;
   }
-  
+
   .link-buttons {
     flex-direction: row;
   }
-  
+
   .link-btn {
     flex: 1;
   }
@@ -644,20 +645,20 @@
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .search-and-filter {
     width: 100%;
   }
-  
+
   .search-box {
     width: 100%;
   }
-  
+
   .write-post-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   .post-thumbnail {
     display: none;
   }
