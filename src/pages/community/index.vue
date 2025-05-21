@@ -12,7 +12,7 @@ const posts = ref([])
 // 게시글 목록 api 요청 -> 화면에 띄움
 const fetchPosts = async () => {
 	try {
-		const response = await api.get('http://localhost:8080/api/boards', {
+		const response = await api.get('/boards', {
 			params: { page: 1 },
 		})
 		posts.value = response.data.postList.map((post) => ({
