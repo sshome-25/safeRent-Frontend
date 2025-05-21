@@ -6,6 +6,7 @@ import MapPage from "@/pages/map/index.vue";
 import CommunityPage from "@/pages/community/index.vue";
 import LoginPage from "@/pages/login/index.vue";
 import SignupPage from "@/pages/signup/index.vue";
+import MyPage from "@/pages/mypage/index.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,6 +40,11 @@ const router = createRouter({
       path: "/signup",
       name: "signup",
       component: SignupPage,
+    },
+    {
+      path: "/mypage",
+      name: "mypage",
+      component: MyPage,
     },
   ],
 });
