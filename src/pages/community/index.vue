@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 import profileImage from '../../assets/blank-profile.png'
+import api from '@/services/api'
 
 const router = useRouter()
 
@@ -12,7 +12,7 @@ const posts = ref([])
 // 게시글 목록 api 요청 -> 화면에 띄움
 const fetchPosts = async () => {
 	try {
-		const response = await axios.get('http://localhost:8080/api/boards', {
+		const response = await api.get('http://localhost:8080/api/boards', {
 			params: { page: 1 },
 		})
 		posts.value = response.data.postList.map((post) => ({
@@ -259,7 +259,7 @@ const submitPost = async () => {
 	}
 
 	try {
-		const response = await axios.post('http://localhost:8080/api/boards', postData)
+		const response = await api.post('/boards', postData)
 		// const newPostId = response.data.post_id
 		console.log(response.data)
 		alert('게시글이 성공적으로 등록되었습니다.')

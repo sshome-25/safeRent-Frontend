@@ -1,10 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
 import profileImage from '../../assets/blank-profile.png'
-// import { useUserStore } from '@/stores/products' // Pinia
-// import { storeToRefs } from 'pinia'
+import api from '@/services/api'
 
 const route = useRoute()
 const router = useRouter()
@@ -39,7 +37,7 @@ const editedPost = ref({
 const fetchPostDetail = async () => {
   isLoading.value = true
   try {
-    const response = await axios.get(`http://localhost:8080/api/boards/${post_id}`)
+    const response = await api.get(`/boards/${post_id}`)
     post.value = {
       id: response.data.post_id,
       title: response.data.title,
@@ -58,7 +56,7 @@ const fetchPostDetail = async () => {
       is_park: response.data.is_park,
     }
     // 현재 사용자가 작성자인지 확인
-    // isAuthor.value = currentUserId.value === post.value.user_id
+    // TODO: token 에서 시용자 이메일 또는 닉네임 빼서 작성지 이메일 또는 닉네임이랑 비교 
     isAuthor.value = currentUserId === post.value.user_id
 
     // 댓글 가져오기
@@ -122,7 +120,7 @@ const saveEdit = async () => {
       is_park: editedPost.value.is_park === true || editedPost.value.is_park === 'true',
     }
 
-    await axios.patch(`http://localhost:8080/api/boards/${post_id}`, postData)
+    await api.patch(`/boards/${post_id}`, postData)
 
     alert('게시글이 성공적으로 수정되었습니다.')
     isEditing.value = false
@@ -142,7 +140,7 @@ const deletePost = async () => {
   }
 
   try {
-    await axios.delete(`http://localhost:8080/api/boards/${post_id}`)
+    await api.delete(`/boards/${post_id}`)
     alert('게시글이 삭제되었습니다.')
     router.push('/community')
   } catch (err) {
@@ -155,7 +153,7 @@ const deletePost = async () => {
 // 댓글 목록 가져오기
 const fetchComments = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/boards/comments`, {
+    const response = await api.get(`/boards/comments`, {
       params: { 'post_id': post_id }
     })
     comments.value = response.data.commentList.map(comment => ({
@@ -180,7 +178,7 @@ const submitComment = async () => {
   }
 
   try {
-    await axios.post(`http://localhost:8080/api/boards/${post_id}/comments`, {
+    await api.post(`/boards/${post_id}/comments`, {
       content: newComment.value
     })
 

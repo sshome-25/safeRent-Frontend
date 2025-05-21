@@ -69,6 +69,6 @@
     export default MyPage;
   </script>
   
-  <style>
+  <style scoped>
   @import './my-page.css';
   </style>
