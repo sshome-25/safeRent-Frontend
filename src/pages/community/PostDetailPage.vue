@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import profileImage from '../../assets/blank-profile.png'
@@ -15,8 +15,6 @@ const post_id = route.params.post_id
 // 반응형 참조로 현재 로그인한 사용자 정보 가져오기
 // const { currentUserId } = storeToRefs(userStore)
 const currentUserId = 2 //테스트용
-
-
 
 // 게시글 및 댓글 데이터
 const post = ref(null)
@@ -182,7 +180,7 @@ const submitComment = async () => {
   }
 
   try {
-    const response = await axios.post(`http://localhost:8080/api/boards/${post_id}/comments`, {
+    await axios.post(`http://localhost:8080/api/boards/${post_id}/comments`, {
       content: newComment.value
     })
 
@@ -260,13 +258,15 @@ onMounted(() => {
 
           <div class="form-group">
             <label for="post-title">제목</label>
-            <input id="post-title" type="text" v-model="editedPost.title" class="form-control"
+            <input 
+              id="post-title" type="text" v-model="editedPost.title" class="form-control"
               placeholder="제목을 입력하세요" />
           </div>
 
           <div class="form-group">
             <label for="post-content">내용</label>
-            <textarea id="post-content" v-model="editedPost.content" class="form-control" rows="10"
+            <textarea 
+              id="post-content" v-model="editedPost.content" class="form-control" rows="10"
               placeholder="내용을 입력하세요"></textarea>
           </div>
 
@@ -276,13 +276,15 @@ onMounted(() => {
             <div class="form-row">
               <div class="form-group">
                 <label for="prefer-location">선호 지역</label>
-                <input id="prefer-location" type="text" v-model="editedPost.prefer_location" class="form-control"
+                <input 
+                  id="prefer-location" type="text" v-model="editedPost.prefer_location" class="form-control"
                   placeholder="예: 강남구, 서초구" />
               </div>
 
               <div class="form-group">
                 <label for="prefer-room-num">방 개수</label>
-                <input id="prefer-room-num" type="number" v-model="editedPost.prefer_room_num" class="form-control"
+                <input 
+                  id="prefer-room-num" type="number" v-model="editedPost.prefer_room_num" class="form-control"
                   min="0" />
               </div>
 
@@ -328,10 +330,6 @@ onMounted(() => {
             </div>
           </div>
 
-
-
-
-
           <h1 class="post-title">{{ post.title }}</h1>
 
           <div class="post-meta">
@@ -352,7 +350,8 @@ onMounted(() => {
           <p>{{ post.content }}</p>
         </div>
 
-        <div class="post-preferences"
+        <div 
+          class="post-preferences"
           v-if="post.prefer_location || post.prefer_room_num || post.prefer_area || post.is_park !== undefined">
           <h3>선호 조건</h3>
           <div class="preferences-grid">
@@ -423,12 +422,6 @@ onMounted(() => {
           </div>
         </div>
       </div>
-
-
-
-
-
-
     </div>
   </div>
 </template>

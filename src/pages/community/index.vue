@@ -297,7 +297,8 @@ onMounted(() => {
 					<div class="category-section">
 						<h3>카테고리</h3>
 						<ul class="category-list">
-							<li v-for="category in categories" :key="category.id"
+							<li 
+                                v-for="category in categories" :key="category.id"
 								:class="{ active: selectedCategory === category.id }" @click="selectCategory(category.id)">
 								<i :class="category.icon"></i>
 								{{ category.name }}
@@ -398,7 +399,8 @@ onMounted(() => {
 						</button>
 
 						<div class="page-numbers">
-							<button v-for="page in paginationNumbers" :key="page" class="page-number"
+							<button 
+                                v-for="page in paginationNumbers" :key="page" class="page-number"
 								:class="{ active: currentPage === page }" @click="changePage(page)">
 								{{ page }}
 							</button>
@@ -439,25 +441,29 @@ onMounted(() => {
 
 					<div class="form-group">
 						<label for="postContent">내용</label>
-						<textarea id="postContent" v-model="newPost.content" class="form-control post-content"
+						<textarea 
+                            id="postContent" v-model="newPost.content" class="form-control post-content"
 							placeholder="내용을 입력하세요" rows="10"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="preferLocation">선호 지역</label>
-						<input type="text" id="preferLocation" v-model="newPost.prefer_location" class="form-control"
+						<input 
+                            type="text" id="preferLocation" v-model="newPost.prefer_location" class="form-control"
 							placeholder="선호 지역을 입력하세요" />
 					</div>
 
 					<div class="form-group">
 						<label for="preferRoomNum">선호 방 개수</label>
-						<input type="number" id="preferRoomNum" v-model="newPost.prefer_room_num" class="form-control"
+						<input 
+                            type="number" id="preferRoomNum" v-model="newPost.prefer_room_num" class="form-control"
 							placeholder="선호 방 개수를 입력하세요" />
 					</div>
 
 					<div class="form-group">
 						<label for="preferArea">선호 평수</label>
-						<input type="number" id="preferArea" v-model="newPost.prefer_area" class="form-control"
+						<input 
+                            type="number" id="preferArea" v-model="newPost.prefer_area" class="form-control"
 							placeholder="선호 평수를 입력하세요 (평)" />
 					</div>
 
