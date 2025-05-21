@@ -67,16 +67,17 @@ export default {
 
 	computed: {
 		progressPercentage() {
-			return ((this.currentStep - 1) * 100) / 3
+			return ((this.currentStep - 1) * 100) / 2
 		},
 		canProceed() {
 			if (this.currentStep === 1) {
 				return this.propertyData.type && this.propertyData.address && this.propertyData.deposit
 			} else if (this.currentStep === 2) {
 				return this.documentFiles.register !== null
-			} else if (this.currentStep === 3) {
-				return this.documentFiles.contract !== null
 			}
+			// else if (this.currentStep === 3) {
+			//   return this.documentFiles.contract !== null;
+			// }
 			return true
 		},
 	},
@@ -90,10 +91,10 @@ export default {
 		},
 
 		nextStep() {
-			if (this.currentStep < 4 && this.canProceed) {
+			if (this.currentStep < 3 && this.canProceed) {
 				this.currentStep += 1
 
-				if (this.currentStep === 4) {
+				if (this.currentStep === 3) {
 					this.startAnalysis()
 				}
 			}
@@ -181,8 +182,8 @@ export default {
 				this.propertyData.longitude,
 				this.propertyData.deposit,
 				this.propertyData.size,
-				this.documentFiles.register,
-				this.documentFiles.contract
+				this.documentFiles.register
+				// this.documentFiles.contract
 			)
 
 			// 분석 완료 (실제로는 API 호출 결과 처리)
@@ -191,7 +192,8 @@ export default {
 			}, 9000)
 		},
 
-		async sendAssessmentRequest(latitude, longitude, price, size, registerFile, contractFile) {
+		// async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
+		async sendAssessmentRequest(latitude, longitude, price, size, registerFile) {
 			try {
 				const authStore = useAuthStore()
 
@@ -210,7 +212,6 @@ export default {
 				formData.append('price', price)
 				formData.append('area', size)
 				formData.append('register_file', registerFile)
-				formData.append('contract_file', contractFile)
 
 				const endpoint = authStore.isLoggedIn ? '/assessments/member' : '/assessments/guest'
 				const response = await api.post(endpoint, formData)

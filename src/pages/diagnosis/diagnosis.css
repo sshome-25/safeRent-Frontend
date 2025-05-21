@@ -101,6 +101,8 @@ nav ul li a:hover {
 }
 
 .progress-bar {
+  margin-left: 12.5%;
+  margin-right: 12.5%;
   height: 6px;
   background-color: #e0e0e0;
   border-radius: 3px;
@@ -165,6 +167,7 @@ nav ul li a:hover {
 
 /* Main Content */
 .main-content {
+  overflow-y: auto;
   padding: 40px 0 100px;
   min-height: 60vh;
 }
@@ -425,8 +428,13 @@ nav ul li a:hover {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .analysis-status {
@@ -809,7 +817,6 @@ nav ul li a:hover {
   width: 100%;
   background-color: white;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-  padding: 15px 0;
   z-index: 100;
 }
 
@@ -861,27 +868,33 @@ nav ul li a:hover {
     flex-direction: column;
     gap: 20px;
   }
-  
+
   .form-row {
     flex-direction: column;
     gap: 20px;
   }
-  
+
   .comparative-data {
     flex-direction: column;
     gap: 20px;
   }
-  
+
   .data-item {
     margin-bottom: 20px;
   }
-  
+
   .action-buttons {
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .next-steps-options {
     grid-template-columns: 1fr;
   }
+}
+
+.diagnosis-page {
+  display: flex;
+  flex-direction: column;
+
 }
