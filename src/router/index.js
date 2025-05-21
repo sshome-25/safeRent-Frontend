@@ -1,9 +1,10 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router'
 
 import LandingPage from "@/pages/landing/index.vue";
 import DiagnosisPage from "@/pages/diagnosis/index.vue";
 import MapPage from "@/pages/map/index.vue";
 import CommunityPage from "@/pages/community/index.vue";
+import PostDetailPage from '@/pages/community/PostDetailPage.vue'
 import LoginPage from "@/pages/login/index.vue";
 import SignupPage from "@/pages/signup/index.vue";
 import MyPage from "@/pages/mypage/index.vue";
@@ -32,6 +33,11 @@ const router = createRouter({
       component: CommunityPage,
     },
     {
+			path: '/postDetail/:post_id',
+			name: 'postDetail',
+			component: PostDetailPage,
+		},
+    {
       path: "/login",
       name: "login",
       component: LoginPage,
@@ -49,4 +55,4 @@ const router = createRouter({
   ],
 });
 
-export default router;
+export default router
