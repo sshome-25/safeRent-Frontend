@@ -1,6 +1,7 @@
-import axios from 'axios';
 import kakaoMapService from './services/kakaoMapService';
 import fileUploadService from './services/fileUploadService';
+import api from '@/services/api';
+import { useAuthStore } from '@/stores/auth';
 
 export default {
   name: 'diagnosisPage',
@@ -185,54 +186,37 @@ export default {
         this.isAnalyzing = false;
       }, 9000);
     },
-        
-    async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
-      try {
-        // 1. 먼저 게스트 토큰 발급 받기
-        const tokenResponse = await axios.post(
-          'http://localhost:8080/api/user/guest-token',
-          {
-            purpose: 'assessment-view'
-          }
-        );
-        
-        const token = tokenResponse.data.token;
-        
-        // 2. FormData 객체 생성
-        const formData = new FormData();
-        
-        // URL 파라미터로 전달할 데이터를 FormData에 추가
-        formData.append('latitude', latitude);
-        formData.append('longitude', longitude);
-        formData.append('price', price);
-        
-        // 파일 추가
-        formData.append('register_file', registerFile);
-        formData.append('contract_file', contractFile);
 
-        for (let [key, value] of formData.entries()) {
-          console.log(`${key}: ${value instanceof File ? value.name : value}`);
-        }
-        
-        // 3. 토큰을 사용하여 평가 요청 보내기
-        const response = await axios.post(
-          'http://localhost:8080/api/assessments/guest',
-          formData,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data'
+    async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
+        try {
+            const authStore = useAuthStore();
+            
+            // 게스트 토큰이 필요한 경우에만 발급
+            if (!authStore.isLoggedIn) {
+                const tokenResponse = await api.post('/user/guest-token', {
+                purpose: 'assessment-view'
+                });
+                // 게스트 토큰은 일시적으로만 사용
+                api.defaults.headers.common['Authorization'] = `Bearer ${tokenResponse.data.token}`;
             }
+            
+            const formData = new FormData();
+            formData.append('latitude', latitude);
+            formData.append('longitude', longitude);
+            formData.append('price', price);
+            formData.append('register_file', registerFile);
+            formData.append('contract_file', contractFile);
+            
+            const endpoint = authStore.isLoggedIn ? '/assessments/member' : '/assessments/guest';
+            const response = await api.post(endpoint, formData);
+            
+            console.log('평가 결과:', response.data);
+            return response.data;
+          } catch (error) {
+            console.error('평가 요청 실패:', error);
+            this.isAnalyzing.value = false;
+            throw error;
           }
-        );
-        
-        console.log('평가 결과:', response.data);
-        return response.data;
-      } catch (error) {
-        console.error('평가 요청 실패:', error);
-        this.isAnalyzing = false;
-        throw error;
-      }
     },
 
     // UI 헬퍼 메소드
