@@ -4,8 +4,7 @@
         <div class="logo">안심전세</div>
         <nav>
           <ul>
-            <li><a href="#">홈</a></li>
-            <li><router-link to="/">서비스 소개</router-link></li>
+            <li><router-link to="/">홈</router-link></li>
             <li><router-link to="/community">게시판</router-link></li>
             <!-- 로그인 상태에 따라 다른 UI 표시 -->
             <li v-if="!isLoggedIn">
