@@ -13,22 +13,6 @@
         <button class="profile-button">프로필 관리</button>
       </div>
       
-      <!-- 통계 영역 -->
-      <div class="stats-container">
-        <div class="stat-card">
-          <div class="stat-label">
-            <span class="stat-icon">🏠</span>진행 중인 계약
-          </div>
-          <div class="stat-value">{{ progressingContracts.length }}건</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">
-            <span class="stat-icon">📄</span>완료된 계약
-          </div>
-          <div class="stat-value">{{ completedContracts.length }}건</div>
-        </div>
-      </div>
-      
       <!-- 새 계약 버튼 -->
       <div class="new-contract-button">
         <span class="button-icon">🏠</span>새로운 전세 계약 검증하기
@@ -54,11 +38,6 @@
             :key="index" 
             :contract="contract"
           />
-        </div>
-        
-        <div v-if="currentTab === 'completed'" class="contract-list">
-          <h3 style="margin-bottom: 20px;">완료된 계약</h3>
-          <!-- 완료된 계약 목록 -->
         </div>
       </div>
     </div>

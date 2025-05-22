@@ -15,7 +15,7 @@ export default {
 				size: '',
 				deposit: '',
 				contractDate: '',
-                floor: '',
+				floor: '',
 				latitude: null,
 				longitude: null,
 			},
@@ -183,8 +183,8 @@ export default {
 				this.propertyData.longitude,
 				this.propertyData.deposit,
 				this.propertyData.size,
-                this.propertyData.address + " " + this.propertyData.detailAddress,
-                this.propertyData.floor,
+				this.propertyData.address + ' ' + this.propertyData.detailAddress,
+				this.propertyData.floor,
 				this.documentFiles.register
 			)
 
@@ -194,7 +194,6 @@ export default {
 			}, 9000)
 		},
 
-		// async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
 		async sendAssessmentRequest(latitude, longitude, price, size, address, floor, registerFile) {
 			try {
 				const authStore = useAuthStore()
@@ -208,21 +207,20 @@ export default {
 					api.defaults.headers.common['Authorization'] = `Bearer ${tokenResponse.data.token}`
 				}
 
-                const houseInfo = {
-                    latitude,
-                    longitude,
-                    price,
-                    area: size,
-                    address,
-                    floor,
-                }
+				const houseInfo = {
+					latitude,
+					longitude,
+					price,
+					area: size,
+					address,
+					floor,
+				}
 				const formData = new FormData()
-                formData.append('house_info', new Blob([JSON.stringify(houseInfo)], {type: 'application/json'}))
+				formData.append('house_info', new Blob([JSON.stringify(houseInfo)], { type: 'application/json' }))
 				formData.append('register_file', registerFile)
 
 				const endpoint = authStore.isLoggedIn ? '/assessments/member' : '/assessments/guest'
 				const response = await api.post(endpoint, formData)
-
 				return response.data
 			} catch (error) {
 				console.error('평가 요청 실패:', error)
