@@ -26,26 +26,42 @@ export default {
 			isAnalyzing: false,
 			analysisStatus: '문서 스캔 중...',
 			safetyScore: 85,
-			overallAssessment:
-				'이 매물은 대체로 안전하나, 일부 주의가 필요한 사항이 발견되었습니다. 계약 시 특약사항을 확인하고 적절한 조치를 취하시기 바랍니다.',
+			overallAssessment: '',
+			// '이 매물은 대체로 안전하나, 일부 주의가 필요한 사항이 발견되었습니다. 계약 시 특약사항을 확인하고 적절한 조치를 취하시기 바랍니다.',
+			// issues: [
+			// 	{
+			// 		level: 'warning',
+			// 		label: '특약사항 주의',
+			// 		title: '위험 특약 조항 발견',
+			// 		description:
+			// 			'계약서 특약조항 중 "임차인은 임대인의 채무불이행에 대해 책임을 묻지 않는다"는 조항이 발견되었습니다. 이는 임차인의 권리를 제한할 수 있는 불공정 조항입니다.',
+			// 		solution:
+			// 			'해당 특약조항의 삭제 또는 수정을 요청하세요. 임대인의 의무를 면제하는 조항은 법적으로 무효가 될 수 있으나, 분쟁 예방을 위해 계약 전 수정하는 것이 좋습니다.',
+			// 	},
+			// 	{
+			// 		level: 'caution',
+			// 		label: '근저당권 확인',
+			// 		title: '근저당권 설정액 주의',
+			// 		description:
+			// 			'해당 매물에 총 2억원의 근저당권이 설정되어 있습니다. 전세금 3억원에 비해 위험 수준은 아니지만, 주의가 필요합니다.',
+			// 		solution:
+			// 			'전세권 설정 및 전세보증보험 가입을 통해 보증금을 보호하세요. 계약 후 즉시 전입신고와 확정일자를 받는 것도 중요합니다.',
+			// 	},
+			// ],
 			issues: [
 				{
 					level: 'warning',
-					label: '특약사항 주의',
-					title: '위험 특약 조항 발견',
-					description:
-						'계약서 특약조항 중 "임차인은 임대인의 채무불이행에 대해 책임을 묻지 않는다"는 조항이 발견되었습니다. 이는 임차인의 권리를 제한할 수 있는 불공정 조항입니다.',
-					solution:
-						'해당 특약조항의 삭제 또는 수정을 요청하세요. 임대인의 의무를 면제하는 조항은 법적으로 무효가 될 수 있으나, 분쟁 예방을 위해 계약 전 수정하는 것이 좋습니다.',
+					label: '근저당권 주의',
+					title: '',
+					description: '',
+					solution: '',
 				},
 				{
 					level: 'caution',
-					label: '근저당권 확인',
-					title: '근저당권 설정액 주의',
-					description:
-						'해당 매물에 총 2억원의 근저당권이 설정되어 있습니다. 전세금 3억원에 비해 위험 수준은 아니지만, 주의가 필요합니다.',
-					solution:
-						'전세권 설정 및 전세보증보험 가입을 통해 보증금을 보호하세요. 계약 후 즉시 전입신고와 확정일자를 받는 것도 중요합니다.',
+					label: '특약사항 확인',
+					title: '',
+					description: '',
+					solution: '',
 				},
 			],
 			recommendations: [
@@ -55,8 +71,10 @@ export default {
 				'확정일자 및 전입신고: 계약 체결 후 즉시 확정일자를 받고 전입신고를 진행하세요.',
 			],
 			marketData: {
-				averageDeposit: 31000,
-				depositRange: '2억 8천만원 ~ 3억 3천만원',
+				// averageDeposit: 31000,
+				averageDeposit: 0,
+				// depositRange: '2억 8천만원 ~ 3억 3천만원',
+				depositRange: '',
 			},
 		}
 	},
@@ -189,26 +207,53 @@ export default {
 					this.documentFiles.register
 				)
 
-				// 응답에서 content 필드를 가져와 JSON 파싱
-				if (response && response.content) {
+				if (response && response.grokResult) {
 					try {
-						// JSON 문자열을 객체로 파싱
-						const contentObj = JSON.parse(response.content)
+						// 응답 데이터 확인
+						console.log(response)
+						console.log(response.grokResult)
+						const grokResponse = response.grokResult
 
-						// 파싱된 객체에서 overallAssessment 값 추출
-						if (contentObj.overallAssessment) {
-							this.overallAssessment = contentObj.overallAssessment
+						if (grokResponse.overallAssessment) {
+							this.overallAssessment = grokResponse.overallAssessment
 						}
 
-						// 필요한 경우 다른 값들도 추출
-						if (contentObj.riskFactor1) this.riskFactor1 = contentObj.riskFactor1
-						if (contentObj.solution1) this.solution1 = contentObj.solution1
-						if (contentObj.riskFactor2) this.riskFactor2 = contentObj.riskFactor2
-						if (contentObj.solution2) this.solution2 = contentObj.solution2
+						// issues 배열 초기화 (기존 데이터 제거)
+						this.issues = []
+
+						// riskFactor1과 solution1이 있으면 issues에 추가
+						if (grokResponse.riskFactor1 && grokResponse.solution1) {
+							this.issues.push({
+								level: 'warning',
+								label: '위험 요소 1',
+								title: '위험 요소 발견',
+								description: grokResponse.riskFactor1,
+								solution: grokResponse.solution1,
+							})
+						}
+
+						// riskFactor2와 solution2가 있으면 issues에 추가
+						if (grokResponse.riskFactor2 && grokResponse.solution2) {
+							this.issues.push({
+								level: 'caution',
+								label: '위험 요소 2',
+								title: '추가 위험 요소',
+								description: grokResponse.riskFactor2,
+								solution: grokResponse.solution2,
+							})
+						}
+
+						if (response.aroundAvgPrice !== undefined) {
+							this.marketData.averageDeposit = response.aroundAvgPrice
+						}
+
+						// 원래 값도 저장 (필요한 경우)
+						if (grokResponse.riskFactor1) this.riskFactor1 = grokResponse.riskFactor1
+						if (grokResponse.solution1) this.solution1 = grokResponse.solution1
+						if (grokResponse.riskFactor2) this.riskFactor2 = grokResponse.riskFactor2
+						if (grokResponse.solution2) this.solution2 = grokResponse.solution2
 					} catch (parseError) {
 						console.error('JSON 파싱 오류:', parseError)
-						// JSON 파싱 실패 시 원본 content를 그대로 사용
-						this.overallAssessment = response.content
 					}
 				}
 
@@ -263,11 +308,11 @@ export default {
 
 				const endpoint = authStore.isLoggedIn ? '/assessments/member' : '/assessments/guest'
 				const response = await api.post(endpoint, formData)
-
+				console.log(endpoint + '응답: ' + response)
 				return response.data
 			} catch (error) {
 				console.error('평가 요청 실패:', error)
-				this.isAnalyzing.value = false
+				this.isAnalyzing = false
 				throw error
 			}
 		},
