@@ -15,6 +15,7 @@ export default {
 				size: '',
 				deposit: '',
 				contractDate: '',
+                floor: '',
 				latitude: null,
 				longitude: null,
 			},
@@ -182,8 +183,9 @@ export default {
 				this.propertyData.longitude,
 				this.propertyData.deposit,
 				this.propertyData.size,
+                this.propertyData.address + " " + this.propertyData.detailAddress,
+                this.propertyData.floor,
 				this.documentFiles.register
-				// this.documentFiles.contract
 			)
 
 			// 분석 완료 (실제로는 API 호출 결과 처리)
@@ -193,7 +195,7 @@ export default {
 		},
 
 		// async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
-		async sendAssessmentRequest(latitude, longitude, price, size, registerFile) {
+		async sendAssessmentRequest(latitude, longitude, price, size, address, floor, registerFile) {
 			try {
 				const authStore = useAuthStore()
 
@@ -206,17 +208,21 @@ export default {
 					api.defaults.headers.common['Authorization'] = `Bearer ${tokenResponse.data.token}`
 				}
 
+                const houseInfo = {
+                    latitude,
+                    longitude,
+                    price,
+                    area: size,
+                    address,
+                    floor,
+                }
 				const formData = new FormData()
-				formData.append('latitude', latitude)
-				formData.append('longitude', longitude)
-				formData.append('price', price)
-				formData.append('area', size)
+                formData.append('house_info', new Blob([JSON.stringify(houseInfo)], {type: 'application/json'}))
 				formData.append('register_file', registerFile)
 
 				const endpoint = authStore.isLoggedIn ? '/assessments/member' : '/assessments/guest'
 				const response = await api.post(endpoint, formData)
 
-				console.log('평가 결과:', response.data)
 				return response.data
 			} catch (error) {
 				console.error('평가 요청 실패:', error)

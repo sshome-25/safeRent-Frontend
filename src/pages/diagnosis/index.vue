@@ -45,7 +45,8 @@
           <div class="form-group">
             <label for="address">주소</label>
             <div class="address-container">
-              <input type="text" id="address" v-model="propertyData.address" class="input-field" placeholder="도로명 주소"
+              <input 
+                type="text" id="address" v-model="propertyData.address" class="input-field" placeholder="도로명 주소"
                 readonly>
               <button class="search-address-btn" @click="openKakaoAddressSearch">주소 검색</button>
             </div>
@@ -54,7 +55,8 @@
           <div class="form-row">
             <div class="form-group half">
               <label for="detail-address">상세 주소</label>
-              <input type="text" id="detail-address" v-model="propertyData.detailAddress" class="input-field"
+              <input 
+                type="text" id="detail-address" v-model="propertyData.detailAddress" class="input-field"
                 placeholder="동/호수 입력">
             </div>
 
@@ -71,15 +73,21 @@
             <div class="form-group half">
               <label for="deposit">전세금</label>
               <div class="input-with-unit">
-                <input type="number" id="deposit" v-model="propertyData.deposit" class="input-field"
+                <input 
+                  type="number" id="deposit" v-model="propertyData.deposit" class="input-field"
                   placeholder="숫자만 입력">
                 <span class="unit">만원</span>
               </div>
             </div>
 
             <div class="form-group half">
-              <label for="contract-date">계약 예정일</label>
-              <input type="date" id="contract-date" v-model="propertyData.contractDate" class="input-field">
+              <label for="contract-date">층 수</label>
+              <div class="input-with-unit">
+                <input 
+                  type="number" id="deposit" v-model="propertyData.floor" class="input-field"
+                  placeholder="숫자만 입력">
+                <span class="unit">층</span>
+              </div>
             </div>
           </div>
         </div>
@@ -193,17 +201,6 @@
               </p>
             </div>
           </div>
-
-
-
-          <!-- ====================================== -->
-
-
-
-
-
-
-
         </div>
       </div>
 
