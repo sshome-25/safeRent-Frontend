@@ -280,7 +280,6 @@ export default {
 			// }, 9000)
 		},
 
-		// async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
 		async sendAssessmentRequest(latitude, longitude, price, size, address, floor, registerFile) {
 			try {
 				const authStore = useAuthStore()

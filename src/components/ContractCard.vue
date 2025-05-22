@@ -37,9 +37,6 @@
           <span class="created-text">{{ formatCreatedAt(contract.assessmentHouse.createdAt) }}</span>
         </div>
       </div>
-      <div class="continue-button">
-        완료하기 <span class="arrow-icon">▶️</span>
-      </div>
     </div>
   </template>
   
