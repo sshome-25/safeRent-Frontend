@@ -19,13 +19,13 @@
           <div class="stat-label">
             <span class="stat-icon">🏠</span>진행 중인 계약
           </div>
-          <div class="stat-value">{{ progressContracts }}건</div>
+          <div class="stat-value">{{ progressingContracts.length }}건</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">
             <span class="stat-icon">📄</span>완료된 계약
           </div>
-          <div class="stat-value">{{ completedContracts }}건</div>
+          <div class="stat-value">{{ completedContracts.length }}건</div>
         </div>
       </div>
       
@@ -48,7 +48,7 @@
         </div>
         
         <div v-if="currentTab === 'progress'" class="contract-list">
-          <h3>진행 중인 전세 계약 검증</h3>
+          <h3 style="margin-bottom: 20px;">진행 중인 전세 계약 검증</h3>
           <contract-card 
             v-for="(contract, index) in progressingContracts" 
             :key="index" 
@@ -57,7 +57,7 @@
         </div>
         
         <div v-if="currentTab === 'completed'" class="contract-list">
-          <h3>완료된 계약</h3>
+          <h3 style="margin-bottom: 20px;">완료된 계약</h3>
           <!-- 완료된 계약 목록 -->
         </div>
       </div>

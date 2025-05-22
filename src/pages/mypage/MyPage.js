@@ -9,8 +9,6 @@ export default {
     return {
       profileName: '김안전님',
       profileMessage: '안녕하세요! 안전한 전세 계약을 응원합니다.',
-      progressContracts: 2,
-      completedContracts: 2,
       currentTab: 'progress',
       tabs: [
         { id: 'progress', name: '진행 중인 계약' },
@@ -18,23 +16,22 @@ export default {
       ],
       progressingContracts: [
         {
-          address: '서울시 강남구 테헤란로 123, 502호',
-          date: '2025-04-28 시작',
-          progressRatio: '2/3',
-          progressPercentage: '66%',
-          status: '강화 전세 판단',
-          registerDetail: '등기부 등본 등록',
-          contractDetail: '계약서 등록'
-        },
-        {
-          address: '서울시 종로구 인사동길 45, 203호',
-          date: '2025-04-30 시작',
-          progressRatio: '1/3',
-          progressPercentage: '33%',
-          status: '강화 전세 판단',
-          registerDetail: '등기부 등본 등록',
-          contractDetail: '계약서 등록'
+            assessmentHouse: {
+              id: 1,
+              price: 50000,
+              area: 84.5,
+              address: "서울시 강남구 테헤란로 123",
+              latitude: 37.5665,
+              longitude: 126.9780,
+              isSafe: true,
+              marketPrice: 52000,
+              floor: 15,
+              createdAt: "2024-12-01T14:30:25" 
+            }
         }
+      ],
+      completedContracts: [
+
       ]
     }
   }
