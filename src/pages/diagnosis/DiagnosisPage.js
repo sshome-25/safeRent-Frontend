@@ -15,7 +15,7 @@ export default {
 				size: '',
 				deposit: '',
 				contractDate: '',
-                floor: '',
+				floor: '',
 				latitude: null,
 				longitude: null,
 			},
@@ -174,24 +174,65 @@ export default {
 		},
 
 		// 분석 관련 메소드
-		startAnalysis() {
+		async startAnalysis() {
 			this.isAnalyzing = true
 
-			// 여기서 넘깁니다.
-			this.sendAssessmentRequest(
-				this.propertyData.latitude,
-				this.propertyData.longitude,
-				this.propertyData.deposit,
-				this.propertyData.size,
-                this.propertyData.address + " " + this.propertyData.detailAddress,
-                this.propertyData.floor,
-				this.documentFiles.register
-			)
+			try {
+				// await를 사용하여 비동기 요청의 결과를 기다림
+				const response = await this.sendAssessmentRequest(
+					this.propertyData.latitude,
+					this.propertyData.longitude,
+					this.propertyData.deposit,
+					this.propertyData.size,
+					this.propertyData.address + ' ' + this.propertyData.detailAddress,
+					this.propertyData.floor,
+					this.documentFiles.register
+				)
 
-			// 분석 완료 (실제로는 API 호출 결과 처리)
-			setTimeout(() => {
+				// 응답에서 content 필드를 가져와 JSON 파싱
+				if (response && response.content) {
+					try {
+						// JSON 문자열을 객체로 파싱
+						const contentObj = JSON.parse(response.content)
+
+						// 파싱된 객체에서 overallAssessment 값 추출
+						if (contentObj.overallAssessment) {
+							this.overallAssessment = contentObj.overallAssessment
+						}
+
+						// 필요한 경우 다른 값들도 추출
+						if (contentObj.riskFactor1) this.riskFactor1 = contentObj.riskFactor1
+						if (contentObj.solution1) this.solution1 = contentObj.solution1
+						if (contentObj.riskFactor2) this.riskFactor2 = contentObj.riskFactor2
+						if (contentObj.solution2) this.solution2 = contentObj.solution2
+					} catch (parseError) {
+						console.error('JSON 파싱 오류:', parseError)
+						// JSON 파싱 실패 시 원본 content를 그대로 사용
+						this.overallAssessment = response.content
+					}
+				}
+
+				// 안전 여부 업데이트
+				if (response.isSafe !== undefined) {
+					this.isSafe = response.isSafe
+				}
+
+				// 주소 정보 업데이트
+				if (response.address) {
+					this.address = response.address
+				}
+
+				// 분석 완료
 				this.isAnalyzing = false
-			}, 9000)
+			} catch (error) {
+				console.error('분석 중 오류 발생:', error)
+				this.isAnalyzing = false
+				// 오류 처리 로직 추가
+			}
+			// 분석 완료 (실제로는 API 호출 결과 처리)
+			// setTimeout(() => {
+			// 	this.isAnalyzing = false
+			// }, 9000)
 		},
 
 		// async sendAssessmentRequest(latitude, longitude, price, registerFile, contractFile) {
@@ -208,16 +249,16 @@ export default {
 					api.defaults.headers.common['Authorization'] = `Bearer ${tokenResponse.data.token}`
 				}
 
-                const houseInfo = {
-                    latitude,
-                    longitude,
-                    price,
-                    area: size,
-                    address,
-                    floor,
-                }
+				const houseInfo = {
+					latitude,
+					longitude,
+					price,
+					area: size,
+					address,
+					floor,
+				}
 				const formData = new FormData()
-                formData.append('house_info', new Blob([JSON.stringify(houseInfo)], {type: 'application/json'}))
+				formData.append('house_info', new Blob([JSON.stringify(houseInfo)], { type: 'application/json' }))
 				formData.append('register_file', registerFile)
 
 				const endpoint = authStore.isLoggedIn ? '/assessments/member' : '/assessments/guest'
