@@ -1,9 +1,13 @@
 <template>
   <div class="diagnosis-page">
-    <div class="progress-container">
+
+
+    <div v-if="!isMypage" class=" progress-container">
       <div class="progress-bar">
         <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
       </div>
+
+
       <div class="progress-steps">
         <div class="progress-step" :class="{ active: currentStep >= 1, completed: currentStep > 1 }">
           <div class="step-number">1</div>
@@ -45,8 +49,7 @@
           <div class="form-group">
             <label for="address">주소</label>
             <div class="address-container">
-              <input 
-                type="text" id="address" v-model="propertyData.address" class="input-field" placeholder="도로명 주소"
+              <input type="text" id="address" v-model="propertyData.address" class="input-field" placeholder="도로명 주소"
                 readonly>
               <button class="search-address-btn" @click="openKakaoAddressSearch">주소 검색</button>
             </div>
@@ -55,8 +58,7 @@
           <div class="form-row">
             <div class="form-group half">
               <label for="detail-address">상세 주소</label>
-              <input 
-                type="text" id="detail-address" v-model="propertyData.detailAddress" class="input-field"
+              <input type="text" id="detail-address" v-model="propertyData.detailAddress" class="input-field"
                 placeholder="동/호수 입력">
             </div>
 
@@ -73,8 +75,7 @@
             <div class="form-group half">
               <label for="deposit">전세금</label>
               <div class="input-with-unit">
-                <input 
-                  type="number" id="deposit" v-model="propertyData.deposit" class="input-field"
+                <input type="number" id="deposit" v-model="propertyData.deposit" class="input-field"
                   placeholder="숫자만 입력">
                 <span class="unit">만원</span>
               </div>
@@ -83,9 +84,7 @@
             <div class="form-group half">
               <label for="contract-date">층 수</label>
               <div class="input-with-unit">
-                <input 
-                  type="number" id="deposit" v-model="propertyData.floor" class="input-field"
-                  placeholder="숫자만 입력">
+                <input type="number" id="deposit" v-model="propertyData.floor" class="input-field" placeholder="숫자만 입력">
                 <span class="unit">층</span>
               </div>
             </div>
@@ -204,70 +203,7 @@
         </div>
       </div>
 
-      <!-- Step 3: 계약서 업로드 -->
-      <!-- <div v-if="currentStep === 3" class="step-content">
-        <h2>계약서 업로드</h2>
-        <p class="step-description">
-          계약서 내용을 분석하여 특약사항의 위험성을 진단해 드립니다.
-          <br>
-          <span class="info-text">파일 형식: PDF, JPG, PNG (최대 10MB)</span>
-        </p>
 
-        <div class="upload-container">
-          <div class="upload-area" @click="triggerFileUpload('contract')" @dragover.prevent
-            @drop.prevent="handleFileDrop($event, 'contract')">
-            <div v-if="!documentFiles.contract" class="upload-placeholder">
-              <div class="upload-icon">
-                <i class="fa fa-upload"></i>
-              </div>
-              <p>클릭하여 파일 선택 또는 파일을 여기에 드래그하세요</p>
-              <input ref="contractFileInput" type="file" class="file-input"
-                @change="handleFileSelect($event, 'contract')" accept=".pdf,.jpg,.jpeg,.png" hidden>
-            </div>
-            <div v-else class="file-preview">
-              <div class="file-info">
-                <div class="file-name">{{ documentFiles.contract.name }}</div>
-                <div class="file-size">{{ formatFileSize(documentFiles.contract.size) }}</div>
-              </div>
-              <button class="remove-file-btn" @click.stop="removeFile('contract')">삭제</button>
-            </div>
-          </div>
-        </div> -->
-
-      <!-- <div class="help-section">
-          <h3>계약서 특약사항 주의점</h3>
-          <p>
-            임대차계약서의 특약사항에는 보증금 반환과 관련된 중요한 내용이 포함될 수 있습니다.
-            다음과 같은 내용이 있는지 주의 깊게 살펴보세요.
-          </p>
-
-          <div class="tips-box">
-            <h4>위험한 특약사항 예시</h4>
-            <ul>
-              <li>
-                <strong>선순위 보증금에 대한 책임 전가</strong>: 임차인이 선순위 보증금에 대한 책임을 진다는 조항
-              </li>
-              <li>
-                <strong>근저당 추가 설정 가능 조항</strong>: 임대인이 추가로 근저당을 설정할 수 있다는 조항
-              </li>
-              <li>
-                <strong>대항력 발생 제한</strong>: 전입신고나 확정일자 취득을 제한하는 조항
-              </li>
-              <li>
-                <strong>임대인 책임 회피 조항</strong>: "본 계약과 관련하여 발생하는 모든 민·형사상 책임은 임차인에게 있다" 등의 조항
-              </li>
-            </ul>
-          </div>
-
-          <div class="note-box">
-            <h4>추천사항</h4>
-            <p>
-              계약 체결 전에 공인중개사나 법률 전문가의 검토를 받는 것이 안전합니다.
-              특히 특약사항은 반드시 꼼꼼히 읽고 이해한 후 서명하세요.
-            </p>
-          </div>
-        </div> -->
-      <!-- </div> -->
 
       <!-- Step 3: 진단 결과 -->
       <div v-if="currentStep === 3" class="step-content result-content">
@@ -280,12 +216,6 @@
 
         <div class="result-complete" v-if="!isAnalyzing">
           <div class="result-header">
-            <div class="safety-score" :class="getSafetyScoreClass()">
-              <div class="score-circle">
-                {{ safetyScore }}
-              </div>
-              <div class="score-label">안전 점수</div>
-            </div>
 
             <div class="result-summary">
               <h2>진단 결과</h2>
@@ -344,33 +274,49 @@
               <div class="chart-container">
                 <!-- 차트가 들어갈 자리 -->
                 <div class="chart-placeholder">
-                  주변 시세와 비교한 그래프가 표시됩니다.
+                  <BarChart v-if="marketData.averageDeposit && propertyData.deposit"
+                    :average-deposit="marketData.averageDeposit" :property-deposit="propertyData.deposit" />
+                  <div v-else>주변 시세와 비교한 그래프가 표시됩니다.</div>
                 </div>
               </div>
+
+
+
               <div class="comparative-data">
+
+                <div class="data-item">
+                  <div class="data-label">주변 평균 매매가</div>
+                  <div class="data-value">{{ formatCurrency(marketData.averageDeposit) }}</div>
+                </div>
                 <div class="data-item">
                   <div class="data-label">본 매물 전세가</div>
                   <div class="data-value">{{ formatCurrency(propertyData.deposit) }}</div>
                 </div>
                 <div class="data-item">
-                  <div class="data-label">주변 평균 전세가</div>
-                  <div class="data-value">{{ formatCurrency(marketData.averageDeposit) }}</div>
-                </div>
-                <div class="data-item">
                   <div class="data-label">시세 대비</div>
                   <div class="data-value" :class="getPriceComparisonClass()">{{ getPriceComparisonText() }}</div>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="action-buttons">
-            <button class="report-download-btn" @click="downloadReport">
-              <i class="fa fa-file-pdf-o"></i> 상세 보고서 다운로드
-            </button>
-            <button class="share-btn" @click="shareResult">
-              <i class="fa fa-share-alt"></i> 결과 공유하기
-            </button>
+              </div>
+
+              <!-- 안내 문구 별도 박스 -->
+              <div class="comparison-message" :class="getPriceComparisonClass()">
+                <template v-if="marketData.averageDeposit && propertyData.deposit">
+                  <span v-if="propertyData.deposit / marketData.averageDeposit >= 0.8">
+                    현재 매물의 전세가가 주변 매매가 대비 {{ Math.round(propertyData.deposit / marketData.averageDeposit * 100) }}%
+                    이상으로 깡통 전세일 가능성이 높은 매물입니다.
+                  </span>
+                  <span v-else>
+                    현재 매물의 전세가가 주변 매매가 대비 {{ Math.round(propertyData.deposit / marketData.averageDeposit * 100) }}%
+                    미만으로 안전한 매물입니다.
+                  </span>
+                </template>
+              </div>
+
+
+            </div>
+
+
           </div>
 
           <div class="next-steps">
@@ -378,23 +324,19 @@
             <div class="next-steps-options">
               <div class="next-step-option" @click="$router.push('/map')">
                 <div class="option-icon">
-                  <i class="fa fa-map-marker"></i>
+                  <!-- <i class="fa fa-map-marker"></i> -->
+                  <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/geo-alt.svg" alt="지도"
+                    width="32" />
                 </div>
                 <h4>안전 매물 찾기</h4>
                 <p>검증된 안전한 매물을 지도에서 찾아보세요.</p>
               </div>
 
-              <div class="next-step-option" @click="$router.push('/consultation')">
-                <div class="option-icon">
-                  <i class="fa fa-comments"></i>
-                </div>
-                <h4>전문가 상담</h4>
-                <p>부동산 전문가에게 1:1 상담을 받아보세요.</p>
-              </div>
-
               <div class="next-step-option" @click="$router.push('/community')">
                 <div class="option-icon">
-                  <i class="fa fa-users"></i>
+                  <!-- <i class="fa fa-users"></i> -->
+                  <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/people.svg" alt="커뮤니티"
+                    width="32" />
                 </div>
                 <h4>커뮤니티</h4>
                 <p>다른 사용자들의 경험과 정보를 공유해보세요.</p>
@@ -405,7 +347,7 @@
       </div>
     </div>
 
-    <div class="action-bar">
+    <div class="action-bar" v-if="!isMypage">
       <div class="container">
         <button v-if="currentStep > 1" class="back-btn" @click="prevStep">이전</button>
         <button v-if="currentStep < 3" class="next-btn" @click="nextStep" :disabled="!canProceed">다음</button>

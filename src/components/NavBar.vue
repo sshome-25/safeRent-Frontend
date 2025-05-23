@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="container">
-      <div class="logo">안심전세</div>
+      <div class="logo"><router-link to="/">안심전세</router-link></div>
       <nav>
         <ul>
           <li><router-link to="/">홈</router-link></li>
@@ -84,6 +84,12 @@ export default {
   font-size: 24px;
   font-weight: bold;
   color: #333;
+
+}
+
+.logo a {
+  text-decoration: none;
+  color: var(--primary-color)
 }
 
 nav ul {
