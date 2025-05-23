@@ -165,6 +165,12 @@ nav ul li a:hover {
   background-color: var(--success-color);
 }
 
+.progress-step.completed .step-label {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+
 /* Main Content */
 .main-content {
   overflow-y: auto;
