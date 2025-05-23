@@ -46,7 +46,7 @@ export default {
 		async fetchUserProfile() {
 			try {
 				const response = await api.get('/user/profile')
-				this.profileName = response.data.name || '김안전님'
+				this.profileName = response.data.nickname || '김안전님'
 				this.profileMessage = response.data.message || '안녕하세요! 안전한 전세 계약을 응원합니다.'
 			} catch (error) {
 				console.error('프로필 정보 로딩 실패:', error)
@@ -55,6 +55,8 @@ export default {
 				this.profileMessage = '안녕하세요! 안전한 전세 계약을 응원합니다.'
 			}
 		},
+
+		//==================================
 		async fetchContracts() {
 			try {
 				// 진행 중인 계약 조회
@@ -72,6 +74,7 @@ export default {
 						marketPrice: contract.marketPrice,
 						floor: contract.floor,
 						createdAt: contract.createdAt,
+						analysisId: contract.analysisId,
 					},
 				}))
 			} catch (error) {
@@ -90,6 +93,16 @@ export default {
 			} finally {
 				this.loading = false
 			}
+		},
+
+		handleCardClick(analysisId) {
+			// my-page에서 진단 결과 클릭 -> 진단 상세 페이지 이동
+			console.log('===========handleCardClick 진입!========')
+			console.log(analysisId)
+			this.$router.push({
+				name: 'diagnosis',
+				params: { analysis_id: analysisId },
+			})
 		},
 	},
 }

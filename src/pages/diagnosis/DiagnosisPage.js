@@ -2,11 +2,13 @@ import kakaoMapService from './services/kakaoMapService'
 import fileUploadService from './services/fileUploadService'
 import api from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
+import BarChart from './BarChart.vue'
 
 export default {
 	name: 'diagnosisPage',
 	data() {
 		return {
+			isMypage: false,
 			currentStep: 1,
 			propertyData: {
 				type: '아파트',
@@ -71,17 +73,22 @@ export default {
 				'확정일자 및 전입신고: 계약 체결 후 즉시 확정일자를 받고 전입신고를 진행하세요.',
 			],
 			marketData: {
-				// averageDeposit: 31000,
 				averageDeposit: 0,
-				// depositRange: '2억 8천만원 ~ 3억 3천만원',
 				depositRange: '',
 			},
 		}
 	},
 
-	mounted() {
+	async mounted() {
 		// 카카오맵 스크립트 로드
 		kakaoMapService.loadKakaoMapScript()
+		// 최초 진입 시에도 체크
+		// Mypage의 상세페이지로 쓰일 때
+		if (this.analysis_id) {
+			this.currentStep = 3
+			this.isMypage = true
+			this.fetchAnalysisData()
+		}
 	},
 
 	computed: {
@@ -102,7 +109,76 @@ export default {
 	},
 
 	methods: {
-		// 단계 이동 관련 메소드
+		// my-page에서 접근 하는 경우 analysis 관련 데이터를 fetch 해서 갖고온다.
+		async fetchAnalysisData() {
+			console.log('===============fetchAnalysisData 진입=============')
+			// analysis_id가 없으면 함수 실행하지 않음
+			if (!this.analysis_id) {
+				console.warn('analysis_id가 없습니다. 분석 데이터를 조회하지 않습니다.')
+				return
+			}
+			try {
+				const response = await api.get('/assessments/analysis', {
+					params: { analysis_id: this.analysis_id },
+				})
+
+				console.log(response)
+				// 응답 데이터에서 5개 값 추출 (null/undefined 방지)
+				const data = response?.data
+				console.log(data)
+
+				if (data.overallAssessment) {
+					this.overallAssessment = data.overallAssessment
+				}
+				// issues 배열 초기화 (기존 데이터 제거)
+				this.issues = []
+
+				// riskFactor1과 solution1이 있으면 issues에 추가
+				if (data.riskFactor1 && data.solution1) {
+					this.issues.push({
+						level: 'warning',
+						label: '위험 요소 1',
+						title: '위험 요소 발견',
+						description: data.riskFactor1,
+						solution: data.solution1,
+					})
+				}
+
+				// riskFactor2와 solution2가 있으면 issues에 추가
+				if (data.riskFactor2 && data.solution2) {
+					this.issues.push({
+						level: 'caution',
+						label: '위험 요소 2',
+						title: '추가 위험 요소',
+						description: data.riskFactor2,
+						solution: data.solution2,
+					})
+				}
+
+				if (data.price !== undefined) {
+					this.marketData.averageDeposit = data.price
+				}
+
+				if (data.marketPrice !== undefined) {
+					this.propertyData.deposit = data.marketPrice
+				}
+
+				// 원래 값도 저장 (필요한 경우)
+				if (data.riskFactor1) this.riskFactor1 = data.riskFactor1
+				if (data.solution1) this.solution1 = data.solution1
+				if (data.riskFactor2) this.riskFactor2 = data.riskFactor2
+				if (data.solution2) this.solution2 = data.solution2
+			} catch (error) {
+				console.error('분석 데이터 조회 오류:', error)
+				// 에러 발생 시에도 기본값 처리
+				this.overallAssessment = ''
+				this.riskFactor1 = ''
+				this.solution1 = ''
+				this.riskFactor2 = ''
+				this.solution2 = ''
+			}
+		},
+
 		prevStep() {
 			if (this.currentStep > 1) {
 				this.currentStep -= 1
@@ -353,28 +429,41 @@ export default {
 
 		// 데이터 포맷 관련 메소드
 		formatCurrency(value) {
-			return new Intl.NumberFormat('ko-KR', {
-				style: 'currency',
-				currency: 'KRW',
-				minimumFractionDigits: 0,
-				maximumFractionDigits: 0,
-			}).format(value * 10000)
+			// value는 만원 단위로 들어온다고 가정 (예: 125000 == 1억2500만원)
+			if (value === null || value === undefined || isNaN(value)) return '-'
+
+			// 억 단위 이상
+			if (value >= 10000) {
+				// 1억 = 10,000만원
+				const eok = Math.floor(value / 10000)
+				const man = value % 10000
+				if (man === 0) {
+					return `${eok}억`
+				} else {
+					// 만 단위도 표시
+					return `${eok}억 ${man.toLocaleString('ko-KR')}만원`
+				}
+			}
+			// 만원 단위 이상
+			if (value >= 1) {
+				return `${value.toLocaleString('ko-KR')}만원`
+			}
+			// 1 미만(0 등)
+			return '-'
 		},
 
 		getPriceComparisonClass() {
+			if (!this.marketData.averageDeposit || !this.propertyData.deposit) return ''
 			const ratio = this.propertyData.deposit / this.marketData.averageDeposit
-			if (ratio > 1.1) return 'price-high'
-			if (ratio < 0.9) return 'price-low'
-			return 'price-normal'
+			return ratio >= 0.8 ? 'danger' : 'safe'
 		},
 
 		getPriceComparisonText() {
 			const ratio = this.propertyData.deposit / this.marketData.averageDeposit
 			const percent = Math.abs((ratio - 1) * 100).toFixed(1)
 
-			if (ratio > 1.1) return `시세보다 ${percent}% 높음`
-			if (ratio < 0.9) return `시세보다 ${percent}% 낮음`
-			return `시세 수준`
+			if (ratio >= 1.0) return `시세보다 ${percent}% 높음`
+			if (ratio < 1.0) return `시세보다 ${percent}% 낮음`
 		},
 
 		// 액션 버튼 메소드
@@ -385,5 +474,36 @@ export default {
 		shareResult() {
 			alert('결과 공유 기능은 실제 구현 시 소셜 공유 기능을 연동하세요.')
 		},
+		getSummaryText() {
+			if (!this.marketData.averageDeposit || !this.propertyData.deposit) return '-'
+			const ratio = this.propertyData.deposit / this.marketData.averageDeposit
+			if (ratio > 0.8) {
+				return '위험한 매물입니다'
+			} else {
+				const percent = Math.round(ratio * 100)
+				return `해당 전세가가 매물의 ${percent}% 이하이므로 안전한 매물입니다`
+			}
+		},
+	},
+	props: {
+		analysis_id: {
+			type: String,
+			required: false,
+			default: null,
+		},
+	},
+	watch: {
+		// analysisId가 변할 때마다 currentStep을 업데이트
+		analysis_id: {
+			immediate: true,
+			handler(newVal) {
+				if (newVal) {
+					this.currentStep = 3
+				}
+			},
+		},
+	},
+	components: {
+		BarChart,
 	},
 }

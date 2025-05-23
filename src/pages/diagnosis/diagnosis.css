@@ -106,7 +106,6 @@ nav ul li a:hover {
   height: 6px;
   background-color: #e0e0e0;
   border-radius: 3px;
-  margin-bottom: 20px;
   position: relative;
   overflow: hidden;
 }
@@ -122,6 +121,7 @@ nav ul li a:hover {
   display: flex;
   justify-content: space-between;
   position: relative;
+  margin-top: -18px;
 }
 
 .progress-step {
@@ -143,6 +143,7 @@ nav ul li a:hover {
   position: relative;
   z-index: 2;
   transition: all 0.3s;
+  font-size: 20px;
 }
 
 .step-label {
@@ -162,11 +163,11 @@ nav ul li a:hover {
 }
 
 .progress-step.completed .step-number {
-  background-color: var(--success-color);
+  background-color: var(--primary-color);
 }
 
 .progress-step.completed .step-label {
-  color: var(--success-color);
+  color: var(--primary-color);
   font-weight: 600;
 }
 
@@ -682,7 +683,7 @@ nav ul li a:hover {
 
 .chart-container {
   height: 300px;
-  background-color: #f0f0f0;
+  border: 2px #e0e0e0 solid;
   border-radius: 4px;
   margin-bottom: 20px;
   display: flex;
@@ -902,5 +903,26 @@ nav ul li a:hover {
 .diagnosis-page {
   display: flex;
   flex-direction: column;
+
+}
+
+.chart-placeholder {
+  width: 100%;
+  height: 300px;
+  /* 원하는 높이로 조정 */
+  position: relative;
+  padding: 20px 120px;
+}
+
+.comparison-message.danger {
+  margin-top: 40px;
+  color: #e63946;
+  font-weight: bold;
+}
+
+.comparison-message.safe {
+  margin-top: 40px;
+  color: #43aa8b;
+  font-weight: bold;
 
 }
