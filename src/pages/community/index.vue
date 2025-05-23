@@ -10,10 +10,13 @@ const router = useRouter()
 const posts = ref([])
 
 // 게시글 목록 api 요청 -> 화면에 띄움
-const fetchPosts = async () => {
+const fetchPosts = async (category) => {
 	try {
 		const response = await api.get('/boards', {
-			params: { page: 1 },
+			params: { 
+                page: 1,
+                category: category
+            },
 		})
 		posts.value = response.data.postList.map((post) => ({
 			id: post.post_id,
@@ -42,42 +45,36 @@ const categories = ref([
 		id: 'all',
 		name: '전체글',
 		icon: 'fas fa-th-large',
-		count: 127,
 		description: '커뮤니티의 모든 게시글을 확인하세요.',
 	},
 	{
 		id: 'tips',
 		name: '계약 팁',
 		icon: 'fas fa-lightbulb',
-		count: 45,
 		description: '안전한 전세계약을 위한 유용한 팁을 공유합니다.',
 	},
 	{
 		id: 'scam',
 		name: '사기 예방',
 		icon: 'fas fa-shield-alt',
-		count: 38,
 		description: '전세사기 사례와 예방책을 공유하는 공간입니다.',
 	},
 	{
 		id: 'qa',
 		name: '질문/답변',
 		icon: 'fas fa-question-circle',
-		count: 23,
 		description: '전세 계약에 관한 질문과 답변을 나눠보세요.',
 	},
 	{
 		id: 'review',
 		name: '계약 후기',
 		icon: 'fas fa-star',
-		count: 18,
 		description: '실제 계약 경험과 후기를 공유합니다.',
 	},
 	{
 		id: 'news',
 		name: '부동산 뉴스',
 		icon: 'fas fa-newspaper',
-		count: 3,
 		description: '최신 부동산 소식과 정책 정보를 확인하세요.',
 	},
 ])
@@ -163,6 +160,7 @@ const paginationNumbers = computed(() => {
 
 // methods
 const selectCategory = (categoryId) => {
+    fetchPosts(categoryId)
 	selectedCategory.value = categoryId
 	currentPage.value = 1
 }
@@ -249,7 +247,7 @@ const submitPost = async () => {
 	}
 
 	const postData = {
-		// categoryId: newPost.value.categoryId,
+		category_id: newPost.value.categoryId,
 		title: newPost.value.title,
 		content: newPost.value.content,
 		prefer_location: newPost.value.prefer_location,
@@ -267,7 +265,7 @@ const submitPost = async () => {
 		showWriteModal.value = false
 
 		// 게시글 목록 새로고침
-		await fetchPosts()
+		await fetchPosts(selectedCategory.value)
 
 		// router.push({ name: 'post-detail', params: { id: newPostId } })
 	} catch (error) {
@@ -277,7 +275,7 @@ const submitPost = async () => {
 }
 
 onMounted(() => {
-	fetchPosts()
+	fetchPosts(selectedCategory.value)
 })
 </script>
 
