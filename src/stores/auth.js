@@ -6,7 +6,7 @@ export const useAuthStore = defineStore('auth', {
   // 상태 정의
   state: () => ({
     token: localStorage.getItem('userToken') || '',
-    user: null,
+    userId: localStorage.getItem('userId') || null,
     isLoggedIn: !!localStorage.getItem('userToken')
   }),
   
@@ -31,21 +31,26 @@ export const useAuthStore = defineStore('auth', {
     },
     
     // 사용자 정보 설정
-    setUser(user) {
-      this.user = user;
+    setUser(userId) {
+      this.userId = userId;
+
+      if (userId) {
+        localStorage.setItem('userId', userId);
+      } else {
+        localStorage.removeItem('userId');
+      }
     },
     
     // 로그인 액션
     async login(loginData) {
       try {
         const response = await axios.post('http://localhost:8080/api/user/login', loginData);
-        
         // 토큰 및 로그인 상태 설정
         this.setToken(response.data.token);
         
         // 사용자 정보가 포함된 경우 설정
-        if (response.data.user) {
-          this.setUser(response.data.user);
+        if (response.data.userId) {
+          this.setUser(response.data.userId);
         }
         
         return { success: true, data: response.data };

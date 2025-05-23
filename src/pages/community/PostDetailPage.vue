@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import profileImage from '../../assets/blank-profile.png'
 import api from '@/services/api'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
@@ -12,7 +13,6 @@ const post_id = route.params.post_id
 // const userStore = useUserStore()
 // 반응형 참조로 현재 로그인한 사용자 정보 가져오기
 // const { currentUserId } = storeToRefs(userStore)
-const currentUserId = 2 //테스트용
 
 // 게시글 및 댓글 데이터
 const post = ref(null)
@@ -36,6 +36,9 @@ const editedPost = ref({
 // 게시글 상세 정보 가져오기
 const fetchPostDetail = async () => {
   isLoading.value = true
+  const authStore = useAuthStore()
+  const currentUserId = authStore.userId
+
   try {
     const response = await api.get(`/boards/${post_id}`)
     post.value = {
@@ -56,8 +59,7 @@ const fetchPostDetail = async () => {
       is_park: response.data.is_park,
     }
     // 현재 사용자가 작성자인지 확인
-    // TODO: token 에서 시용자 이메일 또는 닉네임 빼서 작성지 이메일 또는 닉네임이랑 비교 
-    isAuthor.value = currentUserId === post.value.user_id
+    isAuthor.value = currentUserId == post.value.user_id
 
     // 댓글 가져오기
     await fetchComments()
@@ -177,10 +179,15 @@ const submitComment = async () => {
     return
   }
 
+  const comment = {
+    content: newComment.value,
+    post_id: post.value.id,
+    parent_comment_id: 0,
+    house_id: 0,
+  }
+
   try {
-    await api.post(`/boards/${post_id}/comments`, {
-      content: newComment.value
-    })
+    await api.post(`/boards/comments`, comment)
 
     // 성공 알림 표시
     alert('댓글이 등록되었습니다.')
