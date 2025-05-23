@@ -10,12 +10,14 @@ const router = useRouter()
 const posts = ref([])
 
 // 게시글 목록 api 요청 -> 화면에 띄움
-const fetchPosts = async (category) => {
+const fetchPosts = async (category, orderBy) => {
 	try {
+		if (category == undefined) category = "all"
 		const response = await api.get('/boards', {
 			params: {
 				page: 1,
-				category: category
+				category: category,
+				order_by: orderBy
 			},
 		})
 		posts.value = response.data.postList.map((post) => ({
@@ -80,7 +82,7 @@ const postsPerPage = ref(10)
 
 // 검색 및 정렬
 const searchQuery = ref('')
-const sortOption = ref('latest')
+const sortOption = ref('created_at')
 
 // 글쓰기 모달
 const showWriteModal = ref(false)
@@ -110,17 +112,17 @@ const filteredPosts = computed(() => {
 		)
 	}
 
-	switch (sortOption.value) {
-		case 'latest':
-			result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-			break
-		case 'popular':
-			result.sort((a, b) => b.likes - a.likes)
-			break
-		case 'views':
-			result.sort((a, b) => b.views - a.views)
-			break
-	}
+	// switch (sortOption.value) {
+	// 	case 'latest':
+	// 		result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+	// 		break
+	// 	case 'popular':
+	// 		result.sort((a, b) => b.likes - a.likes)
+	// 		break
+	// 	case 'views':
+	// 		result.sort((a, b) => b.views - a.views)
+	// 		break
+	// }
 
 	return result
 })
@@ -154,7 +156,7 @@ const paginationNumbers = computed(() => {
 
 // methods
 const selectCategory = (categoryId) => {
-	fetchPosts(categoryId)
+	fetchPosts(categoryId, "created_at")
 	selectedCategory.value = categoryId
 	currentPage.value = 1
 }
@@ -175,6 +177,7 @@ const searchPosts = () => {
 
 const sortPosts = () => {
 	currentPage.value = 1
+	fetchPosts(selectCategory.value, sortOption.value)
 }
 
 const truncateText = (text, maxLength) => {
@@ -259,7 +262,7 @@ const submitPost = async () => {
 		showWriteModal.value = false
 
 		// 게시글 목록 새로고침
-		await fetchPosts(selectedCategory.value)
+		await fetchPosts(selectedCategory.value, "created_at")
 
 		// router.push({ name: 'post-detail', params: { id: newPostId } })
 	} catch (error) {
@@ -269,7 +272,7 @@ const submitPost = async () => {
 }
 
 onMounted(() => {
-	fetchPosts(selectedCategory.value)
+	fetchPosts(selectedCategory.value, "created_at")
 })
 </script>
 
@@ -326,9 +329,8 @@ onMounted(() => {
 
 							<div class="filter-options">
 								<select v-model="sortOption" @change="sortPosts">
-									<option value="latest">최신순</option>
-									<option value="popular">인기순</option>
-									<option value="views">조회순</option>
+									<option value="created_at">최신순</option>
+									<option value="view_count">조회순</option>
 								</select>
 							</div>
 						</div>
