@@ -162,11 +162,13 @@ const fetchComments = async () => {
       id: comment.comment_id,
       content: comment.content,
       createdAt: comment.created_at,
+      userId: comment.user_id,
       author: {
         name: comment.author_nickname || '사용자',
         avatar: profileImage
       }
     }))
+
   } catch (err) {
     console.error('댓글을 불러오는 중 오류가 발생했습니다:', err)
   }
@@ -202,6 +204,25 @@ const submitComment = async () => {
     alert('댓글 등록에 실패했습니다.')
   }
 }
+
+// 댓글 삭제
+const deleteComment = async (commentId) => {
+  if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+    return
+  }
+
+  try {
+    await api.delete(`/boards/comments/${commentId}`)
+    alert('댓글이 삭제되었습니다.')
+
+    // 댓글 목록 새로고침
+    await fetchComments()
+  } catch (err) {
+    console.error('댓글 삭제 중 오류가 발생했습니다:', err)
+    alert('댓글 삭제에 실패했습니다.')
+  }
+}
+
 
 // 날짜 포맷팅
 const formatDate = (dateString) => {
@@ -263,15 +284,13 @@ onMounted(() => {
 
           <div class="form-group">
             <label for="post-title">제목</label>
-            <input 
-              id="post-title" type="text" v-model="editedPost.title" class="form-control"
+            <input id="post-title" type="text" v-model="editedPost.title" class="form-control"
               placeholder="제목을 입력하세요" />
           </div>
 
           <div class="form-group">
             <label for="post-content">내용</label>
-            <textarea 
-              id="post-content" v-model="editedPost.content" class="form-control" rows="10"
+            <textarea id="post-content" v-model="editedPost.content" class="form-control" rows="10"
               placeholder="내용을 입력하세요"></textarea>
           </div>
 
@@ -281,15 +300,13 @@ onMounted(() => {
             <div class="form-row">
               <div class="form-group">
                 <label for="prefer-location">선호 지역</label>
-                <input 
-                  id="prefer-location" type="text" v-model="editedPost.prefer_location" class="form-control"
+                <input id="prefer-location" type="text" v-model="editedPost.prefer_location" class="form-control"
                   placeholder="예: 강남구, 서초구" />
               </div>
 
               <div class="form-group">
                 <label for="prefer-room-num">방 개수</label>
-                <input 
-                  id="prefer-room-num" type="number" v-model="editedPost.prefer_room_num" class="form-control"
+                <input id="prefer-room-num" type="number" v-model="editedPost.prefer_room_num" class="form-control"
                   min="0" />
               </div>
 
@@ -333,6 +350,9 @@ onMounted(() => {
                 <i class="fas fa-trash"></i> 삭제
               </button>
             </div>
+
+
+
           </div>
 
           <h1 class="post-title">{{ post.title }}</h1>
@@ -355,8 +375,7 @@ onMounted(() => {
           <p>{{ post.content }}</p>
         </div>
 
-        <div 
-          class="post-preferences"
+        <div class="post-preferences"
           v-if="post.prefer_location || post.prefer_room_num || post.prefer_area || post.is_park !== undefined">
           <h3>선호 조건</h3>
           <div class="preferences-grid">
@@ -412,18 +431,32 @@ onMounted(() => {
             <div v-if="comments.length === 0" class="no-comments">
               <p>아직 댓글이 없습니다. 첫 댓글을 작성해보세요!</p>
             </div>
+
             <div v-else v-for="comment in comments" :key="comment.id" class="comment-item">
-              <div class="comment-author">
-                <img :src="comment.author.avatar" :alt="comment.author.name" class="comment-avatar" />
-                <div class="comment-author-info">
-                  <span class="comment-author-name">{{ comment.author.name }}</span>
-                  <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+              <div class="comment-header">
+                <div class="comment-author">
+                  <img :src="comment.author.avatar" :alt="comment.author.name" class="comment-avatar" />
+                  <div class="comment-author-info">
+                    <span class="comment-author-name">{{ comment.author.name }}</span>
+                    <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+                  </div>
+                </div>
+
+                <!-- 댓글 작성자인 경우에만 삭제 버튼 표시 -->
+                <div v-if="useAuthStore().userId == comment.userId" class="comment-actions">
+                  <button class="comment-delete-btn" @click="deleteComment(comment.id)">
+                    X
+                  </button>
                 </div>
               </div>
+
               <div class="comment-content">
                 <p>{{ comment.content }}</p>
               </div>
             </div>
+
+
+
           </div>
         </div>
       </div>
@@ -900,5 +933,65 @@ label {
 
 .submit-btn:hover {
   background-color: var(--secondary-color);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.comment-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: all 0.2s;
+  color: var(--danger-color);
+}
+
+.comment-delete-btn:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+
+.comment-actions {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.comment-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.2s;
+  color: #999;
+  line-height: 1;
+}
+
+.comment-delete-btn:hover {
+  background-color: #f5f5f5;
+  color: #dc3545;
 }
 </style>
