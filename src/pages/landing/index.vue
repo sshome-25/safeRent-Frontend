@@ -1,19 +1,5 @@
 <template>
   <div class="landing-page">
-    <header class="header">
-      <div class="container">
-        <div class="logo">안심전세</div>
-        <nav>
-          <ul>
-            <li><a href="#">홈</a></li>
-            <li><router-link to="/">서비스 소개</router-link></li>
-            <li><router-link to="/community">게시판</router-link></li>
-            <li><button class="login-btn">로그인</button></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
     <section class="hero">
       <div class="container">
         <h1>전세사기 걱정 없는 <span class="highlight">안전한 주거생활</span>을 시작하세요</h1>
@@ -143,10 +129,10 @@
 </template>
 
 <script>
-import LandingPage from './LandingPage';
-export default LandingPage;
+  import LandingPage from './LandingPage';
+  export default LandingPage;
 </script>
 
 <style scoped>
-    @import './landing-page.css';
+  @import './landing-page.css';
 </style>
