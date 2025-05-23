@@ -13,10 +13,10 @@ const posts = ref([])
 const fetchPosts = async (category) => {
 	try {
 		const response = await api.get('/boards', {
-			params: { 
-                page: 1,
-                category: category
-            },
+			params: {
+				page: 1,
+				category: category
+			},
 		})
 		posts.value = response.data.postList.map((post) => ({
 			id: post.post_id,
@@ -70,12 +70,6 @@ const categories = ref([
 		name: '계약 후기',
 		icon: 'fas fa-star',
 		description: '실제 계약 경험과 후기를 공유합니다.',
-	},
-	{
-		id: 'news',
-		name: '부동산 뉴스',
-		icon: 'fas fa-newspaper',
-		description: '최신 부동산 소식과 정책 정보를 확인하세요.',
 	},
 ])
 const selectedCategory = ref('all')
@@ -160,7 +154,7 @@ const paginationNumbers = computed(() => {
 
 // methods
 const selectCategory = (categoryId) => {
-    fetchPosts(categoryId)
+	fetchPosts(categoryId)
 	selectedCategory.value = categoryId
 	currentPage.value = 1
 }
@@ -295,8 +289,7 @@ onMounted(() => {
 					<div class="category-section">
 						<h3>카테고리</h3>
 						<ul class="category-list">
-							<li 
-                                v-for="category in categories" :key="category.id"
+							<li v-for="category in categories" :key="category.id"
 								:class="{ active: selectedCategory === category.id }" @click="selectCategory(category.id)">
 								<i :class="category.icon"></i>
 								{{ category.name }}
@@ -397,8 +390,7 @@ onMounted(() => {
 						</button>
 
 						<div class="page-numbers">
-							<button 
-                                v-for="page in paginationNumbers" :key="page" class="page-number"
+							<button v-for="page in paginationNumbers" :key="page" class="page-number"
 								:class="{ active: currentPage === page }" @click="changePage(page)">
 								{{ page }}
 							</button>
@@ -439,29 +431,25 @@ onMounted(() => {
 
 					<div class="form-group">
 						<label for="postContent">내용</label>
-						<textarea 
-                            id="postContent" v-model="newPost.content" class="form-control post-content"
+						<textarea id="postContent" v-model="newPost.content" class="form-control post-content"
 							placeholder="내용을 입력하세요" rows="10"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="preferLocation">선호 지역</label>
-						<input 
-                            type="text" id="preferLocation" v-model="newPost.prefer_location" class="form-control"
+						<input type="text" id="preferLocation" v-model="newPost.prefer_location" class="form-control"
 							placeholder="선호 지역을 입력하세요" />
 					</div>
 
 					<div class="form-group">
 						<label for="preferRoomNum">선호 방 개수</label>
-						<input 
-                            type="number" id="preferRoomNum" v-model="newPost.prefer_room_num" class="form-control"
+						<input type="number" id="preferRoomNum" v-model="newPost.prefer_room_num" class="form-control"
 							placeholder="선호 방 개수를 입력하세요" />
 					</div>
 
 					<div class="form-group">
 						<label for="preferArea">선호 평수</label>
-						<input 
-                            type="number" id="preferArea" v-model="newPost.prefer_area" class="form-control"
+						<input type="number" id="preferArea" v-model="newPost.prefer_area" class="form-control"
 							placeholder="선호 평수를 입력하세요 (평)" />
 					</div>
 
