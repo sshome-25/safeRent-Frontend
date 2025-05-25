@@ -30,7 +30,8 @@ body {
 
 .container {
   max-width: 1200px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
+  margin: 20px auto 20px;
   padding: 0 20px;
 }
 
@@ -858,6 +859,7 @@ nav ul li a:hover {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s;
+  margin-left: auto;
 }
 
 .next-btn:hover {

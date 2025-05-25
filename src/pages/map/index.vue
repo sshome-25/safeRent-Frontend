@@ -731,7 +731,7 @@
   <style scoped>
   .kakao-map-page {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 60px);
     position: relative;
     display: flex;
   }
@@ -753,15 +753,20 @@
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    padding: 15px;
-    max-width: 90vw;
+    /* padding: 15px; */
+    padding: 20px 25px; /* 세로 20px, 가로 25px */
+    width: 900px; /* 고정 너비 */
+    max-width: 95vw; /* 모바일 대응 */
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
   }
   
   .filter-title {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     color: #333;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     text-align: center;
   }
   
@@ -782,7 +787,7 @@
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 500;
     color: #666;
   }

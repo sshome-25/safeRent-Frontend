@@ -1,10 +1,10 @@
 <template>
   <header class="header">
     <div class="container">
-      <div class="logo"><router-link to="/">안심전세</router-link></div>
+      <div class="logo"><router-link to="/">Safe Rent</router-link></div>
       <nav>
         <ul>
-          <li><router-link to="/">홈</router-link></li>
+          <!-- <li><router-link to="/">홈</router-link></li> -->
           <li><router-link to="/community">게시판</router-link></li>
           <!-- 로그인 상태에 따라 다른 UI 표시 -->
           <li v-if="!isLoggedIn">
@@ -71,7 +71,7 @@ export default {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 0 15px;
   display: flex;
@@ -81,11 +81,12 @@ export default {
 
 .logo {
   margin-bottom: 0;
-  font-size: 24px;
+  font-size: 36px;
   font-weight: bold;
   color: #333;
 
 }
+
 
 .logo a {
   text-decoration: none;
@@ -102,6 +103,7 @@ nav ul {
 
 nav ul li {
   margin-left: 20px;
+  font-size: 24px;
 }
 
 nav ul li a {
@@ -116,6 +118,7 @@ nav ul li a {
   padding: 8px 15px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 18px;
 }
 
 .user-menu {
@@ -126,6 +129,7 @@ nav ul li a {
 .mypage-btn, .logout-btn {
   padding: 8px 12px;
   cursor: pointer;
+  font-size: 18px;
 }
 
 .logout-btn {

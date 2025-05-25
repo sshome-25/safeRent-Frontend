@@ -349,9 +349,9 @@
 
     <div class="action-bar" v-if="!isMypage">
       <div class="container">
-        <button v-if="currentStep > 1" class="back-btn" @click="prevStep">이전</button>
-        <button v-if="currentStep < 3" class="next-btn" @click="nextStep" :disabled="!canProceed">다음</button>
-        <button v-if="currentStep === 3 && isAnalyzing" class="analyze-btn" disabled>분석 중...</button>
+        <button v-show="currentStep > 1" class="back-btn" @click="prevStep">이전</button>
+        <button v-show="currentStep < 3" class="next-btn" @click="nextStep" :disabled="!canProceed">다음</button>
+        <button v-show="currentStep === 3 && isAnalyzing" class="analyze-btn" disabled>분석 중...</button>
       </div>
     </div>
   </div>
