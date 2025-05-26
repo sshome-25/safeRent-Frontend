@@ -171,8 +171,29 @@ const getCategoryDescription = (categoryId) => {
 	return category ? category.description : ''
 }
 
-const searchPosts = () => {
-	currentPage.value = 1
+const searchPosts = async () => {
+    const response = await api.get("boards/search", {
+			params: {
+                page: 1,
+				category: (!selectCategory.value) ? "all" : selectCategory.value,
+				order_by: sortOption.value,
+                keyword: searchQuery.value
+			},
+		}
+    )
+    
+    posts.value = response.data.postList.map((post) => ({
+			id: post.post_id,
+			categoryId: 'all',
+			title: post.title,
+			content: post.content,
+			createdAt: post.created_at,
+			author: {
+				name: post.author_nickname,
+				avatar: profileImage,
+			},
+			// views: post.view_count,
+		}))
 }
 
 const sortPosts = () => {
