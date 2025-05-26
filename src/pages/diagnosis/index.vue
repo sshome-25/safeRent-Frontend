@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="container main-content" style="margin-bottom: 100px">
+    <div class="container main-content">
       <!-- Step 1: 매물 정보 입력 -->
       <div v-if="currentStep === 1" class="step-content">
         <h2>매물 정보 입력</h2>
@@ -117,8 +117,9 @@
             <div v-if="!documentFiles.register" class="upload-placeholder">
               <div class="upload-icon">
                 <i class="fa fa-upload"></i>
+                클릭하여 파일 선택 또는 파일을 여기에 드래그하세요
               </div>
-              <p>클릭하여 파일 선택 또는 파일을 여기에 드래그하세요</p>
+              <!-- <p>클릭하여 파일 선택 또는 파일을 여기에 드래그하세요</p> -->
               <input ref="registerFileInput" type="file" class="file-input"
                 @change="handleFileSelect($event, 'register')" accept=".pdf,.jpg,.jpeg,.png" hidden>
             </div>
@@ -349,9 +350,11 @@
 
     <div class="action-bar" v-if="!isMypage">
       <div class="container">
-        <button v-if="currentStep > 1" class="back-btn" @click="prevStep">이전</button>
-        <button v-if="currentStep < 3" class="next-btn" @click="nextStep" :disabled="!canProceed">다음</button>
-        <button v-if="currentStep === 3 && isAnalyzing" class="analyze-btn" disabled>분석 중...</button>
+        <button v-show="currentStep === 2" class="back-btn" @click="prevStep">이전</button>
+        <button v-show="currentStep < 3" class="next-btn" @click="nextStep" :disabled="!canProceed">다음</button>
+        <button v-show="currentStep === 3 && isAnalyzing" class="analyze-btn" disabled>분석 중...</button>
+        <button v-show="currentStep === 3 && !isAnalyzing" class="analyze-btn"
+          @click="this.router.push('/')">나가기</button>
       </div>
     </div>
   </div>

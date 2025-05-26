@@ -1,0 +1,168 @@
+:root {
+  --primary-color: #0055b3;
+  --primary-light: #e6f0ff;
+  --secondary-color: #00377a;
+  --accent-color: #00a8ff;
+  --text-color: #333333;
+  --light-text: #666666;
+  --background: #ffffff;
+  --light-gray: #f5f7fa;
+  --border-color: #e1e4e8;
+  --danger-color: #e53935;
+  --warning-color: #ff9800;
+  --caution-color: #ffc107;
+  --success-color: #4caf50;
+  --info-color: #2196f3;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+}
+
+body {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* .container {
+  max-width: 700px;
+  margin: 20px auto 20px !important;
+  padding: 0 15px;
+} */
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 100px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #e7f1ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.profile-image i {
+  color: #5090ff;
+  font-size: 24px;
+}
+
+.profile-info {
+  flex-grow: 1;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.profile-message {
+  font-size: 14px;
+  color: #777;
+}
+
+.profile-button {
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.stats-container {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin-right: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card:last-child {
+  margin-right: 0;
+}
+
+.stat-icon {
+  color: #3478f6;
+  margin-right: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.new-contract-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3478f6;
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.new-contract-button i {
+  margin-right: 8px;
+}
+
+.tab-container {
+  margin-bottom: 20px;
+}
+
+.tab-buttons {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+  padding: 15px 10px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: #777;
+  margin-right: 15px;
+}
+
+.tab-button.active {
+  color: #3478f6;
+  border-bottom: 2px solid #3478f6;
+  font-weight: bold;
+}
+
+.contract-list {
+  margin-top: 20px;
+}

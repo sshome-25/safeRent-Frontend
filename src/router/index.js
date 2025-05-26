@@ -54,6 +54,10 @@ const router = createRouter({
 			component: MyPage,
 		},
 	],
+	scrollBehavior(to, from, savedPosition) {
+		// 항상 페이지 이동 시 최상단으로 이동
+		return { top: 0 }
+	},
 })
 
 export default router

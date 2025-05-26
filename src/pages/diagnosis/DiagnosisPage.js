@@ -3,9 +3,15 @@ import fileUploadService from './services/fileUploadService'
 import api from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 import BarChart from './BarChart.vue'
+import { useRouter } from 'vue-router'
 
 export default {
 	name: 'diagnosisPage',
+	setup() {
+		const router = useRouter()
+
+		return { router }
+	},
 	data() {
 		return {
 			isMypage: false,
