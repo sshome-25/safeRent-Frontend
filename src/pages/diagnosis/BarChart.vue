@@ -54,7 +54,7 @@ export default {
     chartData() {
       const isHigher = this.propertyDeposit > this.averageDeposit;
       return {
-        labels: [ '주변 평균 전세가', '본 매물 전세가' ],
+        labels: [ '주변 평균 매매가', '본 매물 전세가' ],
         datasets: [
           {
             label: '전세가(만원)',

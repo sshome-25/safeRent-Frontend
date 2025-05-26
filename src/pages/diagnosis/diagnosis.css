@@ -96,7 +96,7 @@ nav ul li a:hover {
 
 /* Progress Bar */
 .progress-container {
-  padding: 30px 0;
+  padding: 50px 0 20px 0;
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
@@ -318,7 +318,7 @@ nav ul li a:hover {
   background-color: white;
   border: 2px dashed var(--border-color);
   border-radius: 8px;
-  padding: 40px 20px;
+  padding: 30px 20px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s;
@@ -330,9 +330,10 @@ nav ul li a:hover {
 }
 
 .upload-icon {
-  font-size: 36px;
+  /* font-size: 36px; */
+  font-size: 18px;
   color: var(--light-text);
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
 }
 
 .upload-placeholder p {
@@ -377,7 +378,8 @@ nav ul li a:hover {
 
 /* Help Section */
 .help-section {
-  margin-top: 40px;
+  /* margin-top: 40px; */
+  margin-top: 100px;
 }
 
 .help-section h3 {
@@ -831,6 +833,7 @@ nav ul li a:hover {
 .action-bar .container {
   display: flex;
   justify-content: space-between;
+  margin: 10px auto;
 }
 
 .back-btn {

@@ -5,7 +5,9 @@
       <nav>
         <ul>
           <!-- <li><router-link to="/">홈</router-link></li> -->
-          <li><router-link to="/community">게시판</router-link></li>
+          <li><router-link to="/diagnosis" class="community-btn">매물 진단</router-link></li>
+          <li><router-link to="/map" class="community-btn">안전 매물 찾기</router-link></li>
+          <li><router-link to="/community" class="community-btn">게시판</router-link></li>
           <!-- 로그인 상태에 따라 다른 UI 표시 -->
           <li v-if="!isLoggedIn">
             <button class="login-btn" @click="goToLogin">로그인</button>
@@ -64,10 +66,20 @@ export default {
 </script>
 
 <style scoped>
+/* .header {
+  background-color: #f8f9fa;
+  padding: 5px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} */
 .header {
   background-color: #f8f9fa;
-  padding: 10px 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 5px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  /* 그림자 강도 증가 및 아래쪽으로 확장 */
+  z-index: 1000;
+  position: relative;
+  /* 레이아웃 안정화 */
+  /* 다른 요소 위에 표시되도록 설정 */
 }
 
 .container {
@@ -103,7 +115,7 @@ nav ul {
 
 nav ul li {
   margin-left: 20px;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 nav ul li a {
@@ -111,39 +123,57 @@ nav ul li a {
   color: #333;
 }
 
-.login-btn {
-  background-color: #007bff;
-  color: white;
+
+.community-btn {
+  background: none;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  /* color: var(--primary-color); */
+  font-size: 19px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 18px;
+  transition: color 0.2s, text-shadow 0.2s, transform 0.2s;
+  outline: none;
+  box-shadow: none;
+}
+
+.community-btn:hover {
+  color: var(--secondary-color);
+  text-shadow: 0 2px 8px rgba(0, 85, 179, 0.15);
+  transform: scale(1.2);
+}
+
+.login-btn,
+.mypage-btn,
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 17px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.2s, text-shadow 0.2s, transform 0.2s;
+  outline: none;
+  box-shadow: none;
+}
+
+.login-btn:hover,
+.mypage-btn:hover,
+.logout-btn:hover,
+.login-btn:focus,
+.mypage-btn:focus,
+.logout-btn:focus {
+  color: var(--secondary-color);
+  text-shadow: 0 2px 8px rgba(0, 85, 179, 0.15);
+  transform: scale(1.08);
 }
 
 .user-menu {
   display: flex;
-  gap: 10px;
-}
-
-.mypage-btn, .logout-btn {
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.logout-btn {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 4px;
-}
-
-.mypage-btn {
-  background-color: #4CAF50;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  display: inline-block;
+  gap: 12px;
+  align-items: center;
 }
 </style>

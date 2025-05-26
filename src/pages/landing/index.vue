@@ -79,10 +79,6 @@
           </div>
         </div>
 
-        <div class="cta-buttons">
-          <button class="primary-btn" @click="navigateTo('diagnosis')">내 매물 진단받기</button>
-          <button class="secondary-btn" @click="navigateTo('map')">안전 매물 찾기</button>
-        </div>
       </div>
     </section>
 

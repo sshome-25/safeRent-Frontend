@@ -8,7 +8,7 @@
 <script>
 import NavBar from './components/NavBar.vue'
 import { useAuthStore } from '@/stores/auth'
-import '@/pages/landing/landing-page.css';
+// import '@/pages/landing/landing-page.css';
 
 export default {
   name: 'App',
@@ -31,6 +31,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /* margin-top: 60px; */
+  display: flex;
+  flex-direction: column;
 }
 </style>
